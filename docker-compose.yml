@@ -1,0 +1,9 @@
+version: "3.3"
+
+services:
+  engine:
+    container_name: parts_engine
+    build: .
+    image: dmcbrayer/parts_engine
+    volumes:
+      - ./app:/engine
