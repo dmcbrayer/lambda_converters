@@ -36,11 +36,25 @@ def lambda_handler(event, context):
     stl_file = os.path.splitext(local_step)[0] + '.stl'
 
     print("Calculating volume of part")
-    # print('Converting {} to {}'.format(local_step, stl_file))
     result = analyze_file(local_step)
-
     print(json.dumps(result))
-    # s3_key = STEP_KEY_PREFIX + os.path.basename(stl_file)
 
-    # print('Uploading {} to {}/{}'.format(stl_file, s3_bucket, s3_key))
-    # s3.put_object(stl_file, s3_bucket, s3_key)
+
+    print('Converting {} to {}'.format(local_step, stl_file))
+    convert(local_step, stl_file)
+
+    s3_key = STEP_KEY_PREFIX + os.path.basename(stl_file)
+
+    print('Uploading {} to {}/{}'.format(stl_file, s3_bucket, s3_key))
+    s3.put_object(stl_file, s3_bucket, s3_key)
+
+    url = s3.get_object_url(s3_bucket, s3_key)
+
+
+    result.update({
+        'filename': s3_key,
+        'url': '',
+        'stl_url': url
+    })
+
+    return json.dumps(result)
