@@ -14,6 +14,9 @@ STEP_KEY_PREFIX = 'cad_files/stl/'
 def lambda_handler(event, context):
     print('Running lambda_handler...')
 
+    # s3_bucket = event['Records'][0]['s3']['bucket']['name']
+    # s3_object = event['Records'][0]['s3']['object']['key']
+
     s3_bucket = event.get('s3_bucket')
     s3_object = event.get('s3_object')
 
